@@ -1,7 +1,7 @@
 const companyName = '甘棠';
-const applicationName = '数据分发器';
-const versionNo = 'DDM 1.1.0';
-const versionTime = '20230224';
+const applicationName = '数据库管理工具';
+const versionNo = 'DBMT 1.0.0';
+const versionTime = '20230425';
 const versionContent = '基础版';
 
 
