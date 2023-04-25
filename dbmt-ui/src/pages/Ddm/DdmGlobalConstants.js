@@ -1,0 +1,56 @@
+/**
+ * 子视图操作
+ */
+const actionKeyMap = {
+  /** 新增策略确认事件 */
+  ACTION_DDM_POLICY_ADD_CONFIRM: 'ACTION_DDM_POLICY_ADD_CONFIRM',
+  /** 删除策略确认事件 */
+  ACTION_DDM_POLICY_REMOVE_CONFIRM: 'ACTION_DDM_POLICY_REMOVE_CONFIRM',
+
+  /** 新增数据源实例确认事件 */
+  ACTION_DDM_INSTANCE_ADD_CONFIRM: 'ACTION_DDM_INSTANCE_ADD_CONFIRM',
+  /** 更新数据源实例确认事件 */
+  ACTION_DDM_INSTANCE_UPDATE_CONFIRM: 'ACTION_DDM_INSTANCE_UPDATE_CONFIRM',
+  /** 删除数据源实例确认事件 */
+  ACTION_DDM_INSTANCE_REMOVE_CONFIRM: 'ACTION_DDM_INSTANCE_REMOVE_CONFIRM',
+
+  /** 新增输出源实例确认事件 */
+  ACTION_DDM_SINK_ADD_CONFIRM: 'ACTION_DDM_SINK_ADD_CONFIRM',
+  /** 删除输出源确认事件 */
+  ACTION_DDM_SINK_REMOVE_CONFIRM: 'ACTION_DDM_SINK_REMOVE_CONFIRM',
+
+}
+
+/**
+ * 视图key
+ */
+const viewKeyMap = {
+  /** 新增策略 */
+  VIEW_DDM_POLICY_ADD: 'VIEW_DDM_POLICY_ADD',
+  /** 删除策略 */
+  VIEW_DDM_POLICY_REMOVE: 'VIEW_DDM_POLICY_REMOVE',
+
+  /** 新增数据源实例 */
+  VIEW_DDM_INSTANCE_ADD: 'VIEW_DDM_INSTANCE_ADD',
+  /** 功能更新数据源实例 */
+  VIEW_DDM_INSTANCE_UPDATE: 'VIEW_DDM_INSTANCE_UPDATE',  
+  /** 删除数据源实例 */
+  VIEW_DDM_INSTANCE_REMOVE: 'VIEW_DDM_INSTANCE_REMOVE',
+
+  /** 新增输出源实例 */
+  VIEW_DDM_SINK_ADD: 'VIEW_DDM_SINK_ADD',
+  /** 删除输出源实例 */
+  VIEW_DDM_SINK_REMOVE: 'VIEW_DDM_SINK_REMOVE',
+
+  /** 查看输出列表 */
+  VIEW_DDM_SINK_OUTPUT_LIST: 'VIEW_DDM_SINK_OUTPUT_LIST',
+  /** 查看分发日志 */
+  VIEW_DDM_LOG: 'VIEW_DDM_LOG',
+}
+
+
+
+export default {
+  actionKeyMap: actionKeyMap,
+  viewKeyMap: viewKeyMap,  
+};
