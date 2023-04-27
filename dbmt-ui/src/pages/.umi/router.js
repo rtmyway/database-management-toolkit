@@ -8,7 +8,7 @@ import {
 import dynamic from 'umi/dynamic';
 import renderRoutes from 'umi/lib/renderRoutes';
 import history from '@@/history';
-import RendererWrapper0 from '/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/pages/.umi/LocaleWrapper.jsx';
+import RendererWrapper0 from '/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/pages/.umi/LocaleWrapper.jsx';
 import _dvaDynamic from 'dva/dynamic';
 
 const Router = require('dva/router').routerRedux.ConnectedRouter;
@@ -19,7 +19,7 @@ const routes = [
     component: __IS_BROWSER
       ? _dvaDynamic({
           component: () => import('../../layouts/UserLayout'),
-          LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+          LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
             .default,
         })
       : require('../../layouts/UserLayout').default,
@@ -31,14 +31,14 @@ const routes = [
           ? _dvaDynamic({
               app: require('@tmp/dva').getApp(),
               models: () => [
-                import('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/pages/User/models/register.js').then(
+                import('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/pages/User/models/register.js').then(
                   m => {
                     return { namespace: 'register', ...m.default };
                   },
                 ),
               ],
               component: () => import('../User/Login'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+              LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
           : require('../User/Login').default,
@@ -47,7 +47,7 @@ const routes = [
       {
         component: () =>
           React.createElement(
-            require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+            require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
             { pagesPath: 'src/pages', hasRoutesInConfig: true },
           ),
@@ -59,7 +59,7 @@ const routes = [
     component: __IS_BROWSER
       ? _dvaDynamic({
           component: () => import('../../layouts/BasicLayout'),
-          LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+          LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
             .default,
         })
       : require('../../layouts/BasicLayout').default,
@@ -72,7 +72,7 @@ const routes = [
         component: __IS_BROWSER
           ? _dvaDynamic({
               component: () => import('../Ddm/DdmDashbord/DdmDashbordMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+              LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
           : require('../Ddm/DdmDashbord/DdmDashbordMain').default,
@@ -85,7 +85,7 @@ const routes = [
         component: __IS_BROWSER
           ? _dvaDynamic({
               component: () => import('../Ddm/DdmInstance/DdmInstanceMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+              LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
           : require('../Ddm/DdmInstance/DdmInstanceMain').default,
@@ -99,7 +99,7 @@ const routes = [
           ? _dvaDynamic({
               component: () =>
                 import('../Ddm/DdmCustomizedInstance/DdmCustomizedInstanceMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+              LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
           : require('../Ddm/DdmCustomizedInstance/DdmCustomizedInstanceMain')
@@ -113,7 +113,7 @@ const routes = [
         component: __IS_BROWSER
           ? _dvaDynamic({
               component: () => import('../Ddm/DdmPolicy/DdmPolicyMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+              LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
           : require('../Ddm/DdmPolicy/DdmPolicyMain').default,
@@ -126,7 +126,7 @@ const routes = [
         component: __IS_BROWSER
           ? _dvaDynamic({
               component: () => import('../Ddm/DdmSink/DdmSinkMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+              LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
           : require('../Ddm/DdmSink/DdmSinkMain').default,
@@ -145,7 +145,7 @@ const routes = [
               ? _dvaDynamic({
                   component: () =>
                     import('../Demo/DemoBizcache/DemoBizcacheMain'),
-                  LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
+                  LoadingComponent: require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                     .default,
                 })
               : require('../Demo/DemoBizcache/DemoBizcacheMain').default,
@@ -154,7 +154,7 @@ const routes = [
           {
             component: () =>
               React.createElement(
-                require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                   .default,
                 { pagesPath: 'src/pages', hasRoutesInConfig: true },
               ),
@@ -164,7 +164,7 @@ const routes = [
       {
         component: () =>
           React.createElement(
-            require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+            require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
             { pagesPath: 'src/pages', hasRoutesInConfig: true },
           ),
@@ -174,7 +174,7 @@ const routes = [
   {
     component: () =>
       React.createElement(
-        require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+        require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
           .default,
         { pagesPath: 'src/pages', hasRoutesInConfig: true },
       ),

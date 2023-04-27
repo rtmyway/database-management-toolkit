@@ -20,12 +20,12 @@ export function _onCreate() {
     app.use(plugin);
   });
   
-  app.model({ namespace: 'global', ...(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/models/global.js').default) });
-app.model({ namespace: 'list', ...(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/models/list.js').default) });
-app.model({ namespace: 'login', ...(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/models/login.js').default) });
-app.model({ namespace: 'project', ...(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/models/project.js').default) });
-app.model({ namespace: 'setting', ...(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/models/setting.js').default) });
-app.model({ namespace: 'user', ...(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/models/user.js').default) });
+  app.model({ namespace: 'global', ...(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/models/global.js').default) });
+app.model({ namespace: 'list', ...(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/models/list.js').default) });
+app.model({ namespace: 'login', ...(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/models/login.js').default) });
+app.model({ namespace: 'project', ...(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/models/project.js').default) });
+app.model({ namespace: 'setting', ...(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/models/setting.js').default) });
+app.model({ namespace: 'user', ...(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/models/user.js').default) });
   return app;
 }
 
