@@ -1,3 +1,6 @@
 /dbmt-ui/.temp/
 /dbmt-ui/node_modules/
 /dbmt-app/target
+/.idea
+/*/.idea/
+*.iml
