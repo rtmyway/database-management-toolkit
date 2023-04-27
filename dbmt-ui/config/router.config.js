@@ -14,48 +14,16 @@ export default [
     routes: [
       {
         path: '/',
-        name: 'ddm-dashbord',
+        name: 'dbmt-dashbord',
         icon: 'solution',
-        component: './Ddm/DdmDashbord/DdmDashbordMain',
+        component: './Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain',
       },
       {
-        path: '/instance',
-        name: 'ddm-instance',
+        path: '/connection-config',
+        name: 'dbmt-connection-config',
         icon: 'solution',
-        component: './Ddm/DdmInstance/DdmInstanceMain',
-      },    
-      {
-        path: '/customized-instance',
-        name: 'ddm-customized-instance',
-        icon: 'solution',
-        component: './Ddm/DdmCustomizedInstance/DdmCustomizedInstanceMain',
-      },                 
-      {
-        path: '/policy',
-        name: 'ddm-policy',
-        icon: 'solution',
-        component: './Ddm/DdmPolicy/DdmPolicyMain',
-      },      
- 
-      {
-        path: '/sink',
-        name: 'ddm-sink',
-        icon: 'solution',
-        component: './Ddm/DdmSink/DdmSinkMain',
-      },     
-      {
-        name: 'demo',
-        icon: 'solution',
-        hideInMenu: false,
-        routes: [
-          {
-            path: '/demo/bizcache',
-            name: 'demo-bizcache',
-            icon: 'solution',
-            component: './Demo/DemoBizcache/DemoBizcacheMain',
-          }
-        ]
-      },                            
+        component: './Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain',
+      },                             
     ],
   },
 
