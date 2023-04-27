@@ -33,7 +33,7 @@ public class ConnectionConfigService implements BaseAction<ConnectionConfigEntit
     }
 
     @Override
-    public Boolean delete(ConnectionConfigEntity connectionConfigEntity) {
+    public Boolean remove(ConnectionConfigEntity connectionConfigEntity) {
         connectionConfigRepository.deleteById(connectionConfigEntity.getId());
         return true;
     }

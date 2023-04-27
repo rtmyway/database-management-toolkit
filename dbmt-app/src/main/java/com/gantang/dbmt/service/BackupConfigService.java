@@ -25,7 +25,7 @@ public class BackupConfigService implements BaseAction<BackupConfigEntity> {
     }
 
     @Override
-    public Boolean delete(BackupConfigEntity backupConfigEntity) {
+    public Boolean remove(BackupConfigEntity backupConfigEntity) {
         backupConfigRepository.deleteById(backupConfigEntity.getId());
         return true;
     }

@@ -29,9 +29,9 @@ public class FlashbackPolicyController {
         return R.success(flashbackPolicyService.update(flashbackPolicyEntity));
     }
 
-    @PostMapping("delete")
-    public R<Boolean> delete(@RequestBody FlashbackPolicyEntity flashbackPolicyEntity) {
-        return R.success(flashbackPolicyService.delete(flashbackPolicyEntity));
+    @PostMapping("remove")
+    public R<Boolean> remove(@RequestBody FlashbackPolicyEntity flashbackPolicyEntity) {
+        return R.success(flashbackPolicyService.remove(flashbackPolicyEntity));
     }
 
     @PostMapping("list")

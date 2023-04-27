@@ -25,7 +25,7 @@ public class RestoreConfigService implements BaseAction<RestoreConfigEntity> {
     }
 
     @Override
-    public Boolean delete(RestoreConfigEntity restoreConfigEntity) {
+    public Boolean remove(RestoreConfigEntity restoreConfigEntity) {
         restoreConfigRepository.deleteById(restoreConfigEntity.getId());
         return true;
     }

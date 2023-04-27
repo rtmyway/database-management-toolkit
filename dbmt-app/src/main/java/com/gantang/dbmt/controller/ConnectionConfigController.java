@@ -29,9 +29,9 @@ public class ConnectionConfigController {
         return R.success(connectionConfigService.update(entity));
     }
 
-    @PostMapping("delete")
-    public R<Boolean> delete(@RequestBody ConnectionConfigEntity entity) {
-        return R.success(connectionConfigService.delete(entity));
+    @PostMapping("remove")
+    public R<Boolean> remove(@RequestBody ConnectionConfigEntity entity) {
+        return R.success(connectionConfigService.remove(entity));
     }
 
     @PostMapping("list")

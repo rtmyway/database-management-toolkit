@@ -29,9 +29,9 @@ public class BackupConfigController {
         return R.success(backupConfigService.update(entity));
     }
 
-    @PostMapping("delete")
-    public R<Boolean> delete(@RequestBody BackupConfigEntity entity) {
-        return R.success(backupConfigService.delete(entity));
+    @PostMapping("remove")
+    public R<Boolean> remove(@RequestBody BackupConfigEntity entity) {
+        return R.success(backupConfigService.remove(entity));
     }
 
     @PostMapping("list")

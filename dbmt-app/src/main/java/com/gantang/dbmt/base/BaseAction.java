@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BaseAction<T> {
     Boolean add(T t);
-    Boolean delete(T t);
+    Boolean remove(T t);
     Boolean update(T t);
 
     Boolean enable(T t);

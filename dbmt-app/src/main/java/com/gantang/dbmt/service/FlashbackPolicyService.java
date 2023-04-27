@@ -26,7 +26,7 @@ public class FlashbackPolicyService implements BaseAction<FlashbackPolicyEntity>
     }
 
     @Override
-    public Boolean delete(FlashbackPolicyEntity flashbackPolicyEntity) {
+    public Boolean remove(FlashbackPolicyEntity flashbackPolicyEntity) {
         flashbackPolicyRepository.deleteById(flashbackPolicyEntity.getId());
         return true;
     }
