@@ -23,7 +23,13 @@ export default [
         name: 'dbmt-connection-config',
         icon: 'solution',
         component: './Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain',
-      },                             
+      },    
+      {
+        path: '/backup-config',
+        name: 'dbmt-backup-config',
+        icon: 'solution',
+        component: './Dbmt/DbmtBackupConfig/DbmtBackupConfigMain',
+      },                                     
     ],
   },
 

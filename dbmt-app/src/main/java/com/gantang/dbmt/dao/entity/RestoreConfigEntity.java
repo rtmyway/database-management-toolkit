@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Table(name="backup_policy")
 @Data
 public class RestoreConfigEntity extends BaseEntity {
+    private String restoreName;
     private String schemaExpression; // sourceSchema1:targetSchema1,sourceSchema2:targetSchema2
     private String tableExpression; // sourceTable1:targetTable1,sourceTable2:targetTable2
     private Boolean isRestoreDdl; // 是否恢复ddl
