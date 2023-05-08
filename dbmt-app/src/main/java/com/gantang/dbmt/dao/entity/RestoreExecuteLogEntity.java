@@ -13,13 +13,8 @@ import javax.persistence.Table;
 @Table(name="restore_execute_log")
 @Data
 public class RestoreExecuteLogEntity extends BaseEntity {
-    private String flashbackPolicyId; // 闪回策略id
-
     private String targetConnectionConfigId; // 目标库连接id
     private String targetConnectionConfigSnapshot; // 目标库连接信息快照
-    private String restoreConfigId; // 恢复配置id
-    private String restoreConfigSnapshot; // 恢复配置快照
-
     private String backupLogId; // 备份id
     private String backupFilePath; // 备份文件路径
     private String opMode; // 操作模式(定时备份,手动备份)

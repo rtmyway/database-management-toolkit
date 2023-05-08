@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {Row, Col, Form, Tag, Select, Button, Table, Switch, Icon, Modal, message} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ViewCommon from '../../../commons/ViewCommon'
-import {add, update, remove, list} from '../../../services/dbmt-connection-config'
+import {add, update, remove, list} from '../../../services/dbmt-restore-config'
 
-import DbmtConnectionConfigAddDrawer from './DbmtConnectionConfigAddDrawer';
-import DbmtConnectionConfigUpdateDrawer from './DbmtConnectionConfigUpdateDrawer';
+import DbmtRestoreConfigAddDrawer from './DbmtRestoreConfigAddDrawer';
+import DbmtRestoreConfigUpdateDrawer from './DbmtRestoreConfigUpdateDrawer';
 
 import styles from '../DbmtGlobal.less';
 
@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 const {Option } = Select;
 const confirm = Modal.confirm;
 @Form.create()
-export default class DbmtConnectionConfigMain extends Component {
+export default class DbmtRestoreConfigMain extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -151,7 +151,7 @@ export default class DbmtConnectionConfigMain extends Component {
   doRemove = (config) => {
     let that = this;
     confirm({
-      title: `确定要删除 【${config.connectionName}】 吗?`,
+      title: `确定要删除 【${config.backupName}】 吗?`,
       content: '删除后无法恢复,请谨慎操作',
       okText: '删除',
       okType: 'danger',
@@ -165,7 +165,7 @@ export default class DbmtConnectionConfigMain extends Component {
         remove(reqParam, (response) => {
           if (response != undefined && response != null) {
             setTimeout(function () {
-              message.success(`${config.connectionName} 已删除`);   
+              message.success(`${config.backupName} 已删除`);   
               that.doList();
               // 加载状态=>完成
               that.setState({ loading: false, });
@@ -193,41 +193,29 @@ export default class DbmtConnectionConfigMain extends Component {
         dataIndex: 'serialNo',
       },{
         key : 2,
-        title: '数据库类型',
+        title: '备份名称',
         render: (text, row, index) => {
-          return <Tag color={'blue'}>{row.databaseItem}</Tag>
+          return <div>{row.backupName}</div>
         },
       },{
         key : 3,
-        title: '环境',
+        title: '备份周期',
         render: (text, row, index) => {
-          let envStr = '';
-          if (row.env == 'PROD') {
-            envStr = '正式';
-          } else if (row.env == 'DEV') {
-            envStr = '临时';
+          let frequencyTypeStr = '';
+          if (row.frequencyType == 'DAY') {
+            frequencyTypeStr = '天';
+          } else if (row.frequencyType == 'WEEK') {
+            frequencyTypeStr = '周';
+          } else if (row.frequencyType == 'MONTH') {
+            frequencyTypeStr = '月';
           }
-          return <Tag color={'blue'}>{envStr}</Tag>
+          return <Tag color={'blue'}>{`${row.frequencyValue}${frequencyTypeStr}1次`}</Tag>
         },
       },{
         key : 4,
-        title: '连接名',
+        title: '备份时间段',
         render: (text, row, index) => {
-          return <div>{row.connectionName}</div>
-        },
-      },{
-        key : 5,
-        title: '连接信息',
-        render: (text, row, index) => {
-          let dbDom = '';
-          if (row.databaseItem == "POSTGRES") {
-            dbDom = <div>
-              <p>{`地址：${row.host}:${row.port}`}</p>
-              <p>{`数据库名：${row.databaseName}`}</p>
-              <p>{`用户名/密码：${row.userName}/${row.password}`}</p>
-            </div>;
-          }
-          return <div>{dbDom}</div>;          
+          return <div>{row.timeslots}</div>
         },
       },{
         key : 9,
@@ -271,8 +259,8 @@ export default class DbmtConnectionConfigMain extends Component {
             </Col>
           </Row>
           <div>
-            <DbmtConnectionConfigAddDrawer destroyOnClose={true} viewObj={this.state.views[0]}/>
-            <DbmtConnectionConfigUpdateDrawer destroyOnClose={true} viewObj={this.state.views[1]}/>
+            <DbmtRestoreConfigAddDrawer destroyOnClose={true} viewObj={this.state.views[0]}/>
+            <DbmtRestoreConfigUpdateDrawer destroyOnClose={true} viewObj={this.state.views[1]}/>
           </div>               
         </Form>
       </div>

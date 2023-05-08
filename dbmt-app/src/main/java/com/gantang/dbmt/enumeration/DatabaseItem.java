@@ -12,27 +12,29 @@ public enum DatabaseItem {
     /**
      * ORACLE数据库
      */
-    ORACLE("ORACLE", ""),
+    ORACLE("ORACLE", "ORACLE", "oracle"),
     /**
      * POSTGRES数据库
      */
-    POSTGRES("POSTGRES", ""),
+    POSTGRES("POSTGRES", "POSTGRES", "postgres"),
     /**
      * MYSQL数据库
      */
-    MYSQL("MYSQL", ""),
+    MYSQL("MYSQL", "MYSQL", "mysql"),
     /**
      * 未知数据库
      */
-    UNKNOWN("UNKNOWN", "");
+    UNKNOWN("UNKNOWN", "", "");
 
 
     private String code;
     private String text;
+    private String executeUser;
 
-    DatabaseItem(String code, String text) {
+    DatabaseItem(String code, String text, String executeUser) {
         this.code = code;
         this.text = text;
+        this.executeUser = executeUser;
     }
 
     public static DatabaseItem getByCode(String code) {
@@ -60,5 +62,13 @@ public enum DatabaseItem {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getExecuteUser() {
+        return executeUser;
+    }
+
+    public void setExecuteUser(String executeUser) {
+        this.executeUser = executeUser;
     }
 }

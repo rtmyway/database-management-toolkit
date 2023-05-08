@@ -119,6 +119,9 @@ export default class DbmtConnectionConfigAddDrawer extends Component {
                   <Input placeholder="请输入域名或IP" onChange={(e) => this.onInputHandle('host', e)} value={this.state.dataObj.host} />
                   <Input placeholder="请输入数据库端口" onChange={(e) => this.onInputHandle('port', e)} value={this.state.dataObj.port} />
                 </FormItem>
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="数据库名称">
+                  <Input placeholder="请输入数据库名称" onChange={(e) => this.onInputHandle('databaseName', e)} value={this.state.dataObj.databaseName} />
+                </FormItem>                
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="用户名/密码">
                   <Input placeholder="请输入用户名" onChange={(e) => this.onInputHandle('userName', e)} value={this.state.dataObj.userName} />
                   <Input placeholder="请输入密码" onChange={(e) => this.onInputHandle('password', e)} value={this.state.dataObj.password} />

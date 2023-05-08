@@ -15,7 +15,7 @@ export default class DbmtBackupConfigUpdateDrawer extends Component {
         backupName: '',
         frequencyType: 'DAY',
         frequencyValue: 1,        
-        timeslots: '',
+        timeSlots: '',
         effectiveStartDate: null,
         effectiveEndDate: null,
         cronExpression: '',
@@ -43,8 +43,8 @@ export default class DbmtBackupConfigUpdateDrawer extends Component {
       dataObj.frequencyType = e.target.value;
     } else if (item == 'frequencyValue') {
       dataObj.frequencyValue = e.target.value;
-    } else if (item == 'timeslots') {
-      dataObj.timeslots = e.target.value;
+    } else if (item == 'timeSlots') {
+      dataObj.timeSlots = e.target.value;
     } else if (item == 'effectiveStartDate') {
       let dateStr = moment(e).format('YYYY-MM-DD') ;
       dataObj.effectiveStartDate = dateStr;
@@ -99,7 +99,7 @@ export default class DbmtBackupConfigUpdateDrawer extends Component {
                   <Input placeholder="备份频率值" onChange={(e) => this.onInputHandle('frequencyValue', e)} value={this.state.dataObj.frequencyValue} />
                 </FormItem>                               
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="备份时间段">
-                  <Input placeholder="12:00-13:00,20:00-21:00" onChange={(e) => this.onInputHandle('timeslots', e)} value={this.state.dataObj.timeslots} />
+                  <Input placeholder="12:00-13:00,20:00-21:00" onChange={(e) => this.onInputHandle('timeSlots', e)} value={this.state.dataObj.timeSlots} />
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="开始日">
                   <DatePicker onChange={(e) => this.onInputHandle('effectiveStartDate', e)} value={startMoment} placeholder="请选择生效开始日"/>

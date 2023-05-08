@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface RestoreLogRepository extends JpaRepository<RestoreExecuteLogEntity, String> {
+public interface RestoreExecuteLogRepository extends JpaRepository<RestoreExecuteLogEntity, String> {
 }

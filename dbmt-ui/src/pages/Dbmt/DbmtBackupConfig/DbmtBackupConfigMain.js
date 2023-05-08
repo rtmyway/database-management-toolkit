@@ -215,7 +215,7 @@ export default class DbmtBackupConfigMain extends Component {
         key : 4,
         title: '备份时间段',
         render: (text, row, index) => {
-          return <div>{row.timeslots}</div>
+          return <div>{row.timeSlots}</div>
         },
       },{
         key : 9,

@@ -34,7 +34,7 @@ defaultAntd = defaultAntd.default || defaultAntd;
 const localeInfo = {
   'en-US': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/locales/en-US.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/locales/en-US.js')),
     },
     locale: 'en-US',
     antd: require('antd/es/locale-provider/en_US'),
@@ -43,7 +43,7 @@ const localeInfo = {
   },
   'zh-CN': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/src/locales/zh-CN.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/locales/zh-CN.js')),
     },
     locale: 'zh-CN',
     antd: require('antd/es/locale-provider/zh_CN'),

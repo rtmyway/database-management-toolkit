@@ -13,13 +13,8 @@ import javax.persistence.Table;
 @Table(name="backup_execute_log")
 @Data
 public class BackupExecuteLogEntity extends BaseEntity {
-    private String flashbackPolicyId; // 闪回策略id
-
     private String sourceConnectionId; // 源库连接配置id
     private String sourceConnectionSnapshot; // 源库连接配置快照
-    private String backupConfigId; // 备份配置id
-    private String backupConfigSnapshot; // 备份配置快照
-
     private String backupName; // 备份名称
     private String backupFilePath; // 备份文件路径
     private Long backupFileSize; // 备份文件大小

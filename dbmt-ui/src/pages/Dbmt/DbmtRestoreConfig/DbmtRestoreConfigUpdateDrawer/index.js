@@ -6,7 +6,7 @@ import styles from './index.less';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
-export default class DbmtBackupConfigAddDrawer extends Component {
+export default class DbmtRestoreConfigUpdateDrawer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,8 +14,8 @@ export default class DbmtBackupConfigAddDrawer extends Component {
       dataObj: {
         backupName: '',
         frequencyType: 'DAY',
-        frequencyValue: 1,
-        timeSlots: '',
+        frequencyValue: 1,        
+        timeslots: '',
         effectiveStartDate: null,
         effectiveEndDate: null,
         cronExpression: '',
@@ -27,25 +27,9 @@ export default class DbmtBackupConfigAddDrawer extends Component {
   componentWillReceiveProps(nextProps) {
     let viewObj = nextProps.viewObj;
     if (viewObj.visible && viewObj.changeable) {
-      let data = {
-        backupName: '',
-        frequencyType: 'DAY',
-        frequencyValue: 1,
-        timeSlots: '',
-        effectiveStartDate: null,
-        effectiveEndDate: null,
-        cronExpression: '',
-        description: '',
-      };
-
-      if (!checkCommon.isEmpty(viewObj.data.id)) {
-        // 克隆
-        data = { ...viewObj.data };
-        data.id = '';
-      }
-
+      console.info(viewObj.data);
       this.setState({
-        dataObj: data,
+        dataObj: viewObj.data,
       });
     }
 
@@ -59,8 +43,8 @@ export default class DbmtBackupConfigAddDrawer extends Component {
       dataObj.frequencyType = e.target.value;
     } else if (item == 'frequencyValue') {
       dataObj.frequencyValue = e.target.value;
-    } else if (item == 'timeSlots') {
-      dataObj.timeSlots = e.target.value;
+    } else if (item == 'timeslots') {
+      dataObj.timeslots = e.target.value;
     } else if (item == 'effectiveStartDate') {
       let dateStr = moment(e).format('YYYY-MM-DD') ;
       dataObj.effectiveStartDate = dateStr;
@@ -87,7 +71,7 @@ export default class DbmtBackupConfigAddDrawer extends Component {
     let endMoment = null;
     if (this.state.dataObj.effectiveEndDate != null) {
       endMoment = moment(this.state.dataObj.effectiveEndDate, 'YYYY-MM-DD');
-    }
+    }    
     return (
       <div>
         <Drawer
@@ -103,7 +87,7 @@ export default class DbmtBackupConfigAddDrawer extends Component {
               <Col span={24}>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="备份名称">
                   <Input placeholder="请输入备份名称" onChange={(e) => this.onInputHandle('backupName', e)} value={this.state.dataObj.backupName} />
-                </FormItem>
+                </FormItem>                
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="备份频率">
                   <Radio.Group onChange={(e) => this.onInputHandle('frequencyType', e)} value={this.state.dataObj.frequencyType}>
                     <Radio value={'DAY'}>按天</Radio>
@@ -113,16 +97,16 @@ export default class DbmtBackupConfigAddDrawer extends Component {
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="备份频率值">
                   <Input placeholder="备份频率值" onChange={(e) => this.onInputHandle('frequencyValue', e)} value={this.state.dataObj.frequencyValue} />
-                </FormItem>
+                </FormItem>                               
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="备份时间段">
-                  <Input placeholder="12:00-13:00,20:00-21:00" onChange={(e) => this.onInputHandle('timeSlots', e)} value={this.state.dataObj.timeSlots} />
+                  <Input placeholder="12:00-13:00,20:00-21:00" onChange={(e) => this.onInputHandle('timeslots', e)} value={this.state.dataObj.timeslots} />
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="开始日">
-                  <DatePicker onChange={(e) => this.onInputHandle('effectiveStartDate', e)} value={startMoment} placeholder="请选择生效开始日" />
+                  <DatePicker onChange={(e) => this.onInputHandle('effectiveStartDate', e)} value={startMoment} placeholder="请选择生效开始日"/>
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="结束日">
-                  <DatePicker onChange={(e) => this.onInputHandle('effectiveEndDate', e)} value={endMoment} placeholder="请选择生效结束日" />
-                </FormItem>
+                  <DatePicker onChange={(e) => this.onInputHandle('effectiveEndDate', e)} value={endMoment} placeholder="请选择生效结束日"/>
+                </FormItem>                
               </Col>
             </Row>
             <Row style={{ marginLeft: '80px' }} gutter={24}>

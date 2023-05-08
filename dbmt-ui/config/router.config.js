@@ -29,7 +29,13 @@ export default [
         name: 'dbmt-backup-config',
         icon: 'solution',
         component: './Dbmt/DbmtBackupConfig/DbmtBackupConfigMain',
-      },                                     
+      },    
+      {
+        path: '/restore-config',
+        name: 'dbmt-restore-config',
+        icon: 'solution',
+        component: './Dbmt/DbmtRestoreConfig/DbmtRestoreConfigMain',
+      },                                           
     ],
   },
 

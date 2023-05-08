@@ -16,6 +16,6 @@ public class RestoreConfigEntity extends BaseEntity {
     private String restoreName;
     private String schemaExpression; // sourceSchema1:targetSchema1,sourceSchema2:targetSchema2
     private String tableExpression; // sourceTable1:targetTable1,sourceTable2:targetTable2
-    private Boolean isRestoreDdl; // 是否恢复ddl
-    private Boolean isRestoreDml; // 是否恢复dml
+    private Boolean isRestoreData; // 是否恢复数据
+    private Boolean isRestoreStructure; // 是否恢复结构(ddl)
 }

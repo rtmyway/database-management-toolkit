@@ -4,7 +4,7 @@ const serverEnv = SERVER_ENV;
 //dbmterver服务器地址
 const dbmterver = [
 	{tag: 'DBMT', env: 'DEV', host: 'http://localhost:8080', version: '1.0.0'},
-	{tag: 'DBMT', env: 'BETA', host: 'http://localhost:8080', version: '1.0.0'},
+	{tag: 'DBMT', env: 'BETA', host: 'http://192.168.1.23:8080', version: '1.0.0'},
 	{tag: 'DBMT', env: 'PRD', host: '/dbmt-server', version: '1.0.0'},
 ];
 

@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import findRoute, {
   getUrlQuery,
-} from '/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/findRoute.js';
+} from '/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/node_modules/umi-build-dev/lib/findRoute.js';
 
 // runtime plugins
 const plugins = require('umi/_runtimePlugin');
@@ -224,7 +224,7 @@ export default (__IS_BROWSER ? null : serverRender);
     require('../../../node_modules/umi-plugin-ui/lib/bubble').default({
       port: 3000,
       path:
-        '/home/taozhen/repo/git_repo/test/database-management-toolkit/dbmt-ui',
+        '/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui',
       currentProject: '',
       isBigfish: undefined,
     });
