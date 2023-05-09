@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import com.gantang.dbmt.base.BaseAction;
 import com.gantang.dbmt.dao.entity.ConnectionConfigEntity;
 import com.gantang.dbmt.dao.repository.ConnectionConfigRepository;
+import com.gantang.dbmt.dto.PageDto;
 import com.gantang.dbmt.enumeration.StatusItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,10 @@ public class ConnectionConfigService implements BaseAction<ConnectionConfigEntit
         return connectionConfigRepository.findAll();
     }
 
+    @Override
+    public PageDto listPage(PageDto pageDto) {
+        return null;
+    }
 
 
     private String generateConnectionName(ConnectionConfigEntity connectionConfigEntity) {

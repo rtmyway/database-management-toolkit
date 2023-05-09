@@ -16,7 +16,8 @@ public class BackupExecuteLogEntity extends BaseEntity {
     private String sourceConnectionId; // 源库连接配置id
     private String sourceConnectionSnapshot; // 源库连接配置快照
     private String backupName; // 备份名称
-    private String backupFilePath; // 备份文件路径
+    private String backupDir; // 备份目录
+    private String backupFileName; // 备份文件名称
     private Long backupFileSize; // 备份文件大小
     private String opMode; // 操作模式(定时备份,手动备份)
     private Long startTime; // 开始时间
