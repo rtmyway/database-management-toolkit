@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {Row, Col, Form, Tag, Select, Button, Table, Switch, Icon, Modal, message} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ViewCommon from '../../../commons/ViewCommon'
-import {add, update, remove, list} from '../../../services/dbmt-restore-config'
+import {add, update, remove, list} from '../../../services/dbmt-backup'
 
-import DbmtRestoreConfigAddDrawer from './DbmtRestoreConfigAddDrawer';
-import DbmtRestoreConfigUpdateDrawer from './DbmtRestoreConfigUpdateDrawer';
+import DbmtBackupConfigAddDrawer from './DbmtBackupConfigAddDrawer';
+import DbmtBackupConfigUpdateDrawer from './DbmtBackupConfigUpdateDrawer';
 
 import styles from '../DbmtGlobal.less';
 
@@ -14,12 +14,23 @@ const FormItem = Form.Item;
 const {Option } = Select;
 const confirm = Modal.confirm;
 @Form.create()
-export default class DbmtRestoreConfigMain extends Component {
+export default class DbmtBackupRestoreMain extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading : false,
-      data : [],
+      backupLogList : [],
+      backupPagination : {
+        total : 0,
+        pageNum : 1,
+        pageSize : 10,
+      },
+      restoreLogList: [],
+      restorePagination : {
+        total : 0,
+        pageNum : 1,
+        pageSize : 10,
+      },      
       views: ViewCommon.createViews([
         {key: 'ADD', title: '新增', visible: false, changeable: false, onSubViewVisibleHandler: this.onSubViewVisibleHandler, onSubViewActionHandler: this.onSubViewActionHandler},
         {key: 'UPDATE', title: '修改', visible: false, changeable: true, onSubViewVisibleHandler: this.onSubViewVisibleHandler, onSubViewActionHandler: this.onSubViewActionHandler},
@@ -30,12 +41,36 @@ export default class DbmtRestoreConfigMain extends Component {
 
   //render前执行
   componentWillMount() {
-    this.doList();
+    this.loadBackupLogListPage();
+    // this.loadRestoreLogList();
   }
 
   componentDidMount(){
 
   }
+
+// //分页事件触发
+// pageChangeHandler = (pagination, filtersArg, sorter) => {
+//   let pageObj = this.state.pagination;
+//   pageObj.current = pagination.current;
+//   pageObj.pageSize = pagination.pageSize;
+//   this.setState({pagination: pageObj,});
+//   this.loadListForPageLaunch(pagination.current, pagination.pageSize);
+// }
+
+// //查询单击事件
+// pageSearchHandler = (e) => {
+//   e.preventDefault();
+//   this.props.form.validateFields((err, values) => {
+//     let searchObj = this.state.searchObj;
+//     searchObj.searchValue = values.searchValue == undefined ? '' : values.searchValue;
+//     searchObj.active = values.active == undefined ? '' : values.active;
+//     this.setState({
+//       searchObj: searchObj,
+//     }, ()=>{this.loadListForPageLaunch(1, this.state.pagination.pageSize);});
+//   });
+// }
+
 
   /**
    * 子视图的显示/隐藏
@@ -124,22 +159,32 @@ export default class DbmtRestoreConfigMain extends Component {
     }
   }  
 
-  /*发起查询*/
-  doList = () => {
+  /*发起备份日志分页查询*/
+  loadBackupLogListPage = (pageNum, pageSize) => {
     const reqParam = {
+      pageNum : pageNum,
+      pageSize : pageSize,
     };
     // 加载状态=>加载中
     this.setState({loading: true,});
     
     list(reqParam, (response) => {
       if (response != undefined && response != null) {
-        let list = response.data;
+        let data = response.data;
+        let list = data.list;
+        let pageInfo = {
+          total: data.total,
+          pageNum: data.pageNum,
+          pageSize: data.pageSize,
+        };
         for (let i = 0; i < list.length; i++) {
-          list[i].key = i + 1;
-          list[i].serialNo = i + 1;
+          list[i].key = list[i].id;
+          list[i].serialNo = (pageInfo.pageNum - 1) * (pageInfo.pageSize) + i + 1;
+
         }
         this.setState({
-          data: list
+          backupLogList: list,
+          pagination: pageInfo
         });
       }
       // 加载状态=>完成
@@ -185,6 +230,7 @@ export default class DbmtRestoreConfigMain extends Component {
 
 
 
+
   render() {
     const columns = [
       {
@@ -215,7 +261,7 @@ export default class DbmtRestoreConfigMain extends Component {
         key : 4,
         title: '备份时间段',
         render: (text, row, index) => {
-          return <div>{row.timeslots}</div>
+          return <div>{row.timeSlots}</div>
         },
       },{
         key : 9,
@@ -230,6 +276,14 @@ export default class DbmtRestoreConfigMain extends Component {
       },
     ];
 
+    const pagination = {
+      current: this.state.backupPagination.current,
+      pageSize: this.state.backupPagination.pageSize,
+      total: this.state.backupPagination.total,
+      showQuickJumper: true,
+      showSizeChanger: true,
+      pageSizeOptions: ['2', '10', '20', '50'],
+    };   
     const { getFieldDecorator } = this.props.form;
     return (
     <PageHeaderWrapper title="">
@@ -254,13 +308,13 @@ export default class DbmtRestoreConfigMain extends Component {
                 loading={this.state.loading}
                 dataSource={this.state.data}
                 columns={columns}
-                pagination={false}
+                pagination={pagination}
               />
             </Col>
           </Row>
           <div>
-            <DbmtRestoreConfigAddDrawer destroyOnClose={true} viewObj={this.state.views[0]}/>
-            <DbmtRestoreConfigUpdateDrawer destroyOnClose={true} viewObj={this.state.views[1]}/>
+            <DbmtBackupConfigAddDrawer destroyOnClose={true} viewObj={this.state.views[0]}/>
+            <DbmtBackupConfigUpdateDrawer destroyOnClose={true} viewObj={this.state.views[1]}/>
           </div>               
         </Form>
       </div>

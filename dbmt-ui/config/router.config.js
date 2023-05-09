@@ -25,17 +25,11 @@ export default [
         component: './Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain',
       },    
       {
-        path: '/backup-config',
-        name: 'dbmt-backup-config',
+        path: '/backup-restore',
+        name: 'dbmt-backup-restore',
         icon: 'solution',
-        component: './Dbmt/DbmtBackupConfig/DbmtBackupConfigMain',
-      },    
-      {
-        path: '/restore-config',
-        name: 'dbmt-restore-config',
-        icon: 'solution',
-        component: './Dbmt/DbmtRestoreConfig/DbmtRestoreConfigMain',
-      },                                           
+        component: './Dbmt/DbmtBackupRestore/DbmtBackupRestoreMain',
+      },                                         
     ],
   },
 

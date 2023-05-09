@@ -96,31 +96,17 @@ const routes = [
         exact: true,
       },
       {
-        path: '/backup-config',
-        name: 'dbmt-backup-config',
+        path: '/backup-restore',
+        name: 'dbmt-backup-restore',
         icon: 'solution',
         component: __IS_BROWSER
           ? _dvaDynamic({
               component: () =>
-                import('../Dbmt/DbmtBackupConfig/DbmtBackupConfigMain'),
+                import('../Dbmt/DbmtBackupRestore/DbmtBackupRestoreMain'),
               LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
-          : require('../Dbmt/DbmtBackupConfig/DbmtBackupConfigMain').default,
-        exact: true,
-      },
-      {
-        path: '/restore-config',
-        name: 'dbmt-restore-config',
-        icon: 'solution',
-        component: __IS_BROWSER
-          ? _dvaDynamic({
-              component: () =>
-                import('../Dbmt/DbmtRestoreConfig/DbmtRestoreConfigMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
-                .default,
-            })
-          : require('../Dbmt/DbmtRestoreConfig/DbmtRestoreConfigMain').default,
+          : require('../Dbmt/DbmtBackupRestore/DbmtBackupRestoreMain').default,
         exact: true,
       },
       {

@@ -7,32 +7,23 @@ const connectionConfigApiUrl = {
 }
 
 // backupConfigApiUrl
-const backupConfigApiUrl = {
-    add: '/backup-config/add', //新增
-    update: '/backup-config/update', //更新
-    remove: '/backup-config/remove', //删除
-    list: '/backup-config/list', //列表    
+const backupApiUrl = {
+    add: '/backup/add', //新增
+    update: '/backup/remove', //删除
+    listPage: '/backup/list-page', //分页列表    
 }
 
 // restoreConfigApiUrl
-const restoreConfigApiUrl = {
-    add: '/restore-config/add', //新增
-    update: '/restore-config/update', //更新
-    remove: '/restore-config/remove', //删除
-    list: '/restore-config/list', //列表    
+const restoreApiUrl = {
+    add: '/restore/add', //新增
+    remove: '/restore/remove', //删除
+    listPage: '/restore/listPage', //分页列表    
 }
 
-// flashbackPolicyApiUrl
-const flashbackPolicyApiUrl = {
-    add: '/flashback-policy/add', //新增
-    update: '/flashback-policy/update', //更新
-    remove: '/flashback-policy/remove', //删除
-    list: '/flashback-policy/list', //列表    
-}
+
 
 export default {
     connectionConfigApiUrl,
-    backupConfigApiUrl,
-    restoreConfigApiUrl,
-    flashbackPolicyApiUrl
+    backupApiUrl,
+    restoreApiUrl,
 }
