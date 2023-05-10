@@ -56,13 +56,13 @@ public class RestoreService implements BaseAction<RestoreExecuteLogEntity> {
 
         // 获得目标数据库连接信息
         ConnectionConfigEntity targetConnectionConfig = null;
-        if (StrUtil.isBlank(restoreExecuteLogEntity.getTargetConnectionConfigId())) {
+        if (StrUtil.isBlank(restoreExecuteLogEntity.getTargetConnectionId())) {
             targetConnectionConfig = JsonTool.toObject(backupExecuteLog.getSourceConnectionSnapshot(), ConnectionConfigEntity.class);
         } else {
             Optional<ConnectionConfigEntity> targetConnectionConfigObj =
-                    connectionConfigRepository.findById(restoreExecuteLogEntity.getTargetConnectionConfigId());
+                    connectionConfigRepository.findById(restoreExecuteLogEntity.getTargetConnectionId());
             if (!targetConnectionConfigObj.isPresent()) {
-                log.error("目标数据库连接信息不存在, id:{}", restoreExecuteLogEntity.getTargetConnectionConfigId());
+                log.error("目标数据库连接信息不存在, id:{}", restoreExecuteLogEntity.getTargetConnectionId());
                 return false;
             }
             targetConnectionConfig = targetConnectionConfigObj.get();
@@ -72,11 +72,11 @@ public class RestoreService implements BaseAction<RestoreExecuteLogEntity> {
         restoreExecuteLogEntity.setId(IdUtil.fastSimpleUUID());
         restoreExecuteLogEntity.setStartTime(System.currentTimeMillis());
         // 设置源库连接信息
-        restoreExecuteLogEntity.setSourceConnectionConfigId(backupExecuteLog.getSourceConnectionId());
-        restoreExecuteLogEntity.setSourceConnectionConfigSnapshot(backupExecuteLog.getSourceConnectionSnapshot());
+        restoreExecuteLogEntity.setSourceConnectionId(backupExecuteLog.getSourceConnectionId());
+        restoreExecuteLogEntity.setSourceConnectionSnapshot(backupExecuteLog.getSourceConnectionSnapshot());
         // 设置目标库连接信息
-        restoreExecuteLogEntity.setTargetConnectionConfigId(targetConnectionConfig.getId());
-        restoreExecuteLogEntity.setTargetConnectionConfigSnapshot(JsonTool.toJson(targetConnectionConfig));
+        restoreExecuteLogEntity.setTargetConnectionId(targetConnectionConfig.getId());
+        restoreExecuteLogEntity.setTargetConnectionSnapshot(JsonTool.toJson(targetConnectionConfig));
 
         // 调用shell
         String backupDir = flashbackConfig.getDataDir().concat(backupExecuteLog.getBackupDir());
