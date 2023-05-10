@@ -16,7 +16,7 @@ export default [
         path: '/',
         name: 'dbmt-dashbord',
         icon: 'solution',
-        component: './Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain',
+        component: './Template/Basic/BasicMain',
       },
       {
         path: '/connection-config',

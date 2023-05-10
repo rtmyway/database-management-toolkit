@@ -16,6 +16,8 @@ import java.util.List;
 @Slf4j
 public class ConnectionConfigService implements BaseAction<ConnectionConfigEntity> {
     @Autowired
+    private QueryCommonService queryCommonService;
+    @Autowired
     private ConnectionConfigRepository connectionConfigRepository;
 
     @Override
@@ -41,6 +43,7 @@ public class ConnectionConfigService implements BaseAction<ConnectionConfigEntit
 
     @Override
     public Boolean update(ConnectionConfigEntity connectionConfigEntity) {
+        connectionConfigEntity.setConnectionName(this.generateConnectionName(connectionConfigEntity));
         connectionConfigRepository.save(connectionConfigEntity);
         return true;
     }
@@ -66,7 +69,16 @@ public class ConnectionConfigService implements BaseAction<ConnectionConfigEntit
 
     @Override
     public PageDto listPage(PageDto pageDto) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from connection_config where 1=1");
+        sb.append(" order by created_at desc ");
+        PageDto resultDto = null;
+        try {
+            resultDto = queryCommonService.loadListPage(sb.toString(), pageDto.getPageNum(), pageDto.getPageSize(), ConnectionConfigEntity.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return resultDto;
     }
 
 

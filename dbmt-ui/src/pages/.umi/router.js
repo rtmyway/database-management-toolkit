@@ -71,13 +71,11 @@ const routes = [
         icon: 'solution',
         component: __IS_BROWSER
           ? _dvaDynamic({
-              component: () =>
-                import('../Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain'),
+              component: () => import('../Template/Basic/BasicMain'),
               LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
                 .default,
             })
-          : require('../Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain')
-              .default,
+          : require('../Template/Basic/BasicMain').default,
         exact: true,
       },
       {

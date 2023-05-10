@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Row, Col, Form, Tag, Select, Button, Table, Switch, Icon, Modal, message} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ViewCommon from '../../../commons/ViewCommon'
-import {add, update, remove, list} from '../../../services/dbmt-connection-config'
+import {add, update, remove, listPage} from '../../../services/dbmt-connection-config'
 
 import DbmtConnectionConfigAddDrawer from './DbmtConnectionConfigAddDrawer';
 import DbmtConnectionConfigUpdateDrawer from './DbmtConnectionConfigUpdateDrawer';
@@ -20,6 +20,11 @@ export default class DbmtConnectionConfigMain extends Component {
     this.state = {
       loading : false,
       data : [],
+      pagination : {
+        total : 0,
+        current : 1,
+        pageSize : 10,
+      },
       views: ViewCommon.createViews([
         {key: 'ADD', title: '新增', visible: false, changeable: false, onSubViewVisibleHandler: this.onSubViewVisibleHandler, onSubViewActionHandler: this.onSubViewActionHandler},
         {key: 'UPDATE', title: '修改', visible: false, changeable: true, onSubViewVisibleHandler: this.onSubViewVisibleHandler, onSubViewActionHandler: this.onSubViewActionHandler},
@@ -30,7 +35,7 @@ export default class DbmtConnectionConfigMain extends Component {
 
   //render前执行
   componentWillMount() {
-    this.doList();
+    this.doListPage(1, this.state.pagination.pageSize);
   }
 
   componentDidMount(){
@@ -87,7 +92,7 @@ export default class DbmtConnectionConfigMain extends Component {
           let that = this;
           setTimeout(function () {
             message.success(`已创建`);   
-            that.doList();
+            that.doListPage(1, that.state.pagination.pageSize);
 
             // 加载状态=>完成
             tmpViews[index].spinning = false;
@@ -107,7 +112,7 @@ export default class DbmtConnectionConfigMain extends Component {
           let that = this;
           setTimeout(function () {
             message.success(`已更新`);   
-            that.doList();
+            that.doListPage(1, that.state.pagination.pageSize);
 
             // 加载状态=>完成
             tmpViews[index].spinning = false;
@@ -125,27 +130,35 @@ export default class DbmtConnectionConfigMain extends Component {
   }  
 
   /*发起查询*/
-  doList = () => {
+  doListPage = (current, pageSize) => {
     const reqParam = {
+      pageNum : current,
+      pageSize : pageSize,
     };
     // 加载状态=>加载中
     this.setState({loading: true,});
     
-    list(reqParam, (response) => {
+    // 开始请求,真实环境请移除setTimeout
+    let that = this;
+    let pageObj = that.state.pagination;
+    listPage(reqParam, (response) => {
       if (response != undefined && response != null) {
-        let list = response.data;
+        let list = response.data.list;
         for (let i = 0; i < list.length; i++) {
-          list[i].key = i + 1;
-          list[i].serialNo = i + 1;
+          list[i].key = list[i].id;
+          list[i].serialNo = (pageObj.current - 1) * (pageObj.pageSize) + i + 1;
         }
-        this.setState({
-          data: list
+        pageObj.total = response.data.total;
+        that.setState({
+          data: list,
+          pagination: pageObj,
         });
       }
       // 加载状态=>完成
-      this.setState({loading: false,});
+      that.setState({loading: false,});
     });
   }
+
 
   /*发起删除*/
   doRemove = (config) => {
@@ -166,7 +179,7 @@ export default class DbmtConnectionConfigMain extends Component {
           if (response != undefined && response != null) {
             setTimeout(function () {
               message.success(`${config.connectionName} 已删除`);   
-              that.doList();
+              that.doListPage(1, that.state.pagination.pageSize);
               // 加载状态=>完成
               that.setState({ loading: false, });
             }, 2000);
@@ -180,6 +193,31 @@ export default class DbmtConnectionConfigMain extends Component {
       onCancel() {
 
       },
+    });
+  }  
+
+  //分页事件触发
+  pageChangeHandler = (pagination, filtersArg, sorter) => {
+    let pageObj = this.state.pagination;
+    pageObj.current = pagination.current;
+    pageObj.pageSize = pagination.pageSize;
+    this.setState({pagination: pageObj,});
+    this.doListPage(pagination.current, pagination.pageSize);
+  }  
+
+  //查询单击事件
+  pageSearchHandler = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      this.setState({
+        loading : false,
+        data : [],
+        pagination : {
+          total : 0,
+          current : 1,
+          pageSize : 10,
+        },
+      }, ()=>{this.doListPage(1, this.state.pagination.pageSize);});
     });
   }  
 
@@ -242,11 +280,20 @@ export default class DbmtConnectionConfigMain extends Component {
       },
     ];
 
+
+    const pagination = {
+      current: this.state.pagination.current,
+      pageSize: this.state.pagination.pageSize,
+      total: this.state.pagination.total,
+      showQuickJumper: true,
+      showSizeChanger: true,
+      pageSizeOptions: ['2', '10', '20', '50'],
+    };    
     const { getFieldDecorator } = this.props.form;
     return (
     <PageHeaderWrapper title="">
       <div className={styles.tableListForm}>
-        <Form  onSubmit={this.doList} layout="inline">
+        <Form  onSubmit={this.pageSearchHandler} layout="inline">
           <Row gutter={24}>
             <Col className='ant-col-offset-20' span={2}>
               <FormItem>
@@ -265,8 +312,9 @@ export default class DbmtConnectionConfigMain extends Component {
                 bordered
                 loading={this.state.loading}
                 dataSource={this.state.data}
+                onChange={this.pageChangeHandler}
                 columns={columns}
-                pagination={false}
+                pagination={pagination}
               />
             </Col>
           </Row>

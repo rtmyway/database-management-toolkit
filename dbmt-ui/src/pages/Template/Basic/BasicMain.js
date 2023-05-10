@@ -28,7 +28,6 @@ export default class BasicMain extends Component {
 
   //render前执行
   componentWillMount() {
-    processTimer();
     //默认执行一次查询
     this.loadListForPageLaunch(1, this.state.pagination.pageSize);
   }
@@ -45,7 +44,6 @@ export default class BasicMain extends Component {
       searchValue : this.state.searchObj.searchValue,
       searchType : this.state.searchObj.searchType,
     };
-    debugger
     // 加载状态=>加载中
     this.setState({loading: true,});
     
@@ -233,25 +231,3 @@ function runAsync(flag){
 
 
 
-/**
- * 处理服务器请求
- * @param reqObj
- * @param callback
- */
-export async function processTimer(obj) {
-  console.info('start');
-  runAsync(false).then(
-    function(data){
-      console.info(data);
-    },
-    function(data){
-      console.info(data);
-    },
-  );
-
-
-  // for (var i = 0; i < 100; i++) {
-  //   doWait(i);
-  //   await timeout(1000);
-  // }
-}

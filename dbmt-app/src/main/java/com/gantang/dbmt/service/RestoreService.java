@@ -86,7 +86,7 @@ public class RestoreService implements BaseAction<RestoreExecuteLogEntity> {
                 "-h".concat(targetConnectionConfig.getHost()),
                 "-p".concat(targetConnectionConfig.getPort()),
                 "-u".concat(targetConnectionConfig.getUserName()),
-                "-P".concat(sourceConnectionConfig.getPassword()),
+                "-P".concat(targetConnectionConfig.getPassword()),
                 "-f".concat(backupFilePath),
                 "-a".concat(targetConnectionConfig.getDatabaseName()),
                 "-i".concat(restoreExecuteLogEntity.getId())  // 指定标识恢复的id

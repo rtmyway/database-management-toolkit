@@ -1,6 +1,7 @@
 package com.gantang.dbmt.controller;
 
 import com.gantang.dbmt.dao.entity.ConnectionConfigEntity;
+import com.gantang.dbmt.dto.PageDto;
 import com.gantang.dbmt.service.ConnectionConfigService;
 import com.gantang.dbmt.vo.R;
 import lombok.extern.slf4j.Slf4j;
@@ -37,5 +38,10 @@ public class ConnectionConfigController {
     @PostMapping("list")
     public R<List<ConnectionConfigEntity>> list() {
         return R.success(connectionConfigService.list());
+    }
+
+    @PostMapping("list-page")
+    public R<PageDto> listPage(@RequestBody PageDto pageDto) {
+        return R.success(connectionConfigService.listPage(pageDto));
     }
 }

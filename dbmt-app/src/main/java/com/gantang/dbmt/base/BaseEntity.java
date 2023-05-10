@@ -22,7 +22,7 @@ import java.util.Date;
 public abstract class BaseEntity implements Serializable {
     @Id
     private String id; // 主键
-    private int status; // 1:有效 0:无效
+    private int status = 1; // 1:有效 0:无效
     @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;

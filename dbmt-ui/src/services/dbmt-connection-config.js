@@ -22,4 +22,9 @@ export function list(params, callback){
   requestCommon.processRequest(reqObj, callback);
 }
 
+export function listPage(params, callback){
+  let reqObj = requestCommon.getPostReqObj(serverConfig.dbmterver, apiUrlConfig.connectionConfigApiUrl.listPage, params);
+  requestCommon.processRequest(reqObj, callback);
+}
+
 

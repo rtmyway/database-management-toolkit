@@ -4,6 +4,7 @@ const connectionConfigApiUrl = {
     update: '/connection-config/update', //更新
     remove: '/connection-config/remove', //删除
     list: '/connection-config/list', //列表    
+    listPage: '/connection-config/list-page', //列表        
 }
 
 // backupConfigApiUrl
@@ -17,7 +18,7 @@ const backupApiUrl = {
 const restoreApiUrl = {
     add: '/restore/add', //新增
     remove: '/restore/remove', //删除
-    listPage: '/restore/listPage', //分页列表    
+    listPage: '/restore/list-page', //分页列表    
 }
 
 
