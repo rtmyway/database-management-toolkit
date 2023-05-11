@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class ConnectionConfigServiceImpl implements ConnectionConfigService {
 
         connectionConfigEntity.setId(IdUtil.fastSimpleUUID());
         connectionConfigEntity.setConnectionName(this.generateConnectionName(connectionConfigEntity));
+        connectionConfigEntity.setCreatedAt(System.currentTimeMillis());
         connectionConfigRepository.save(connectionConfigEntity);
         return true;
     }
@@ -46,6 +48,7 @@ public class ConnectionConfigServiceImpl implements ConnectionConfigService {
     @Override
     public Boolean update(ConnectionConfigEntity connectionConfigEntity) throws DbmtException {
         connectionConfigEntity.setConnectionName(this.generateConnectionName(connectionConfigEntity));
+        connectionConfigEntity.setUpdatedAt(System.currentTimeMillis());
         connectionConfigRepository.save(connectionConfigEntity);
         return true;
     }

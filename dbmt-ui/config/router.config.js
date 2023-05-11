@@ -14,22 +14,16 @@ export default [
     routes: [
       {
         path: '/',
-        name: 'dbmt-dashbord',
-        icon: 'solution',
-        component: './Template/Basic/BasicMain',
-      },
-      {
-        path: '/connection-config',
         name: 'dbmt-connection-config',
         icon: 'solution',
         component: './Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain',
-      },    
-      {
-        path: '/backup-restore',
-        name: 'dbmt-backup-restore',
-        icon: 'solution',
-        component: './Dbmt/DbmtBackupRestore/DbmtBackupRestoreMain',
-      },                                         
+      },
+      // {
+      //   path: '/backup-restore',
+      //   name: 'dbmt-backup-restore',
+      //   icon: 'solution',
+      //   component: './Dbmt/DbmtBackupRestore/DbmtBackupRestoreMain',
+      // },                                         
     ],
   },
 

@@ -109,12 +109,12 @@ export default class DbmtConnectionConfigAddDrawer extends Component {
                     <Radio disabled value={'MYSQL'}>MYSQL</Radio>
                   </Radio.Group>
                 </FormItem>
-                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="环境">
+                {/* <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="环境">
                   <Radio.Group onChange={(e) => this.onInputHandle('env', e)} value={this.state.dataObj.env}>
                     <Radio value={'PROD'}>正式</Radio>
                     <Radio value={'DEV'}>临时</Radio>
                   </Radio.Group>
-                </FormItem>                
+                </FormItem>                 */}
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="主机/端口">
                   <Input placeholder="请输入域名或IP" onChange={(e) => this.onInputHandle('host', e)} value={this.state.dataObj.host} />
                   <Input placeholder="请输入数据库端口" onChange={(e) => this.onInputHandle('port', e)} value={this.state.dataObj.port} />

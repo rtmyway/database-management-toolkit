@@ -67,19 +67,6 @@ const routes = [
     routes: [
       {
         path: '/',
-        name: 'dbmt-dashbord',
-        icon: 'solution',
-        component: __IS_BROWSER
-          ? _dvaDynamic({
-              component: () => import('../Template/Basic/BasicMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
-                .default,
-            })
-          : require('../Template/Basic/BasicMain').default,
-        exact: true,
-      },
-      {
-        path: '/connection-config',
         name: 'dbmt-connection-config',
         icon: 'solution',
         component: __IS_BROWSER
@@ -91,20 +78,6 @@ const routes = [
             })
           : require('../Dbmt/DbmtConnectionConfig/DbmtConnectionConfigMain')
               .default,
-        exact: true,
-      },
-      {
-        path: '/backup-restore',
-        name: 'dbmt-backup-restore',
-        icon: 'solution',
-        component: __IS_BROWSER
-          ? _dvaDynamic({
-              component: () =>
-                import('../Dbmt/DbmtBackupRestore/DbmtBackupRestoreMain'),
-              LoadingComponent: require('/home/taozhen/repo/git_repo/github/database-management-toolkit/dbmt-ui/src/components/PageLoading/index')
-                .default,
-            })
-          : require('../Dbmt/DbmtBackupRestore/DbmtBackupRestoreMain').default,
         exact: true,
       },
       {

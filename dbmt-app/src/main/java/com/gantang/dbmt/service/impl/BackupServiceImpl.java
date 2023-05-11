@@ -43,8 +43,6 @@ public class BackupServiceImpl implements BackupService {
     @Override
     @Async
     public Boolean add(BackupExecuteLogEntity backupExecuteLogEntity) throws DbmtException {
-
-
         // 获得需要备份的数据库连接信息
         Optional<ConnectionConfigEntity> connectionConfigObj = connectionConfigRepository.findById(backupExecuteLogEntity.getSourceConnectionId());
         if (!connectionConfigObj.isPresent()) {
@@ -52,10 +50,10 @@ public class BackupServiceImpl implements BackupService {
             return false;
         }
 
-
         ConnectionConfigEntity sourceConnectionConfig = connectionConfigObj.get();
         backupExecuteLogEntity.setId(IdUtil.fastSimpleUUID());
         backupExecuteLogEntity.setStartTime(System.currentTimeMillis());
+        backupExecuteLogEntity.setCreatedAt(backupExecuteLogEntity.getStartTime());
 
         // 源库配置快照
         backupExecuteLogEntity.setSourceConnectionSnapshot(JsonTool.toJson(sourceConnectionConfig));
@@ -95,6 +93,7 @@ public class BackupServiceImpl implements BackupService {
         String backupFileFullPath = flashbackConfig.getDataDir().concat(backupDirPath).concat("/").concat(backupFileName);
 
         backupExecuteLogEntity.setEndTime(System.currentTimeMillis());
+        backupExecuteLogEntity.setUpdatedAt(backupExecuteLogEntity.getEndTime());
         backupExecuteLogEntity.setIsSuccess(FileTool.isExist(successFileFullPath));
 
         if (backupExecuteLogEntity.getIsSuccess()) {
@@ -167,7 +166,10 @@ public class BackupServiceImpl implements BackupService {
         String sourceConnectionId = null;
 
         try {
-            sourceConnectionId = String.valueOf(pageDto.getParams().get("sourceConnectionId"));
+            Object obj = pageDto.getParams().get("sourceConnectionId");
+            if (obj != null) {
+                sourceConnectionId = String.valueOf(obj);
+            }
         } catch (Exception e) {
         }
 

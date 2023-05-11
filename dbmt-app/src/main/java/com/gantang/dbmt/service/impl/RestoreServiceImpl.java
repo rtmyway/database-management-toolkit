@@ -80,6 +80,7 @@ public class RestoreServiceImpl implements RestoreService {
         // 补充备份日志信息
         restoreExecuteLogEntity.setId(IdUtil.fastSimpleUUID());
         restoreExecuteLogEntity.setStartTime(System.currentTimeMillis());
+        restoreExecuteLogEntity.setCreatedAt(restoreExecuteLogEntity.getStartTime());
         // 设置源库连接信息
         restoreExecuteLogEntity.setSourceConnectionId(backupExecuteLog.getSourceConnectionId());
         restoreExecuteLogEntity.setSourceConnectionSnapshot(backupExecuteLog.getSourceConnectionSnapshot());
@@ -117,6 +118,7 @@ public class RestoreServiceImpl implements RestoreService {
         // 恢复文件成功标识
         String successFilePath = backupDir.concat("/1.").concat(restoreExecuteLogEntity.getId());
         restoreExecuteLogEntity.setEndTime(System.currentTimeMillis());
+        restoreExecuteLogEntity.setUpdatedAt(restoreExecuteLogEntity.getEndTime());
         restoreExecuteLogEntity.setIsSuccess(FileTool.isExist(successFilePath));
 
 
@@ -189,8 +191,14 @@ public class RestoreServiceImpl implements RestoreService {
         String sourceConnectionId = null;
         String targetConnectionId = null;
         try {
-            sourceConnectionId = String.valueOf(pageDto.getParams().get("sourceConnectionId"));
-            targetConnectionId = String.valueOf(pageDto.getParams().get("targetConnectionId"));
+            Object sourceConnectIdObj = pageDto.getParams().get("sourceConnectionId");
+            Object targetConnectIdObj = pageDto.getParams().get("targetConnectionId");
+            if (sourceConnectIdObj != null) {
+                sourceConnectionId = String.valueOf(sourceConnectIdObj);
+            }
+            if (targetConnectIdObj != null) {
+                targetConnectionId = String.valueOf(targetConnectIdObj);
+            }
         } catch (Exception e) {
         }
 

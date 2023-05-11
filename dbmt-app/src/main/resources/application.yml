@@ -1,5 +1,7 @@
 server.port: 8080
 spring:
+  profiles:
+    active: dev
   application: dbmt-app
   jpa:
     hibernate:
@@ -17,12 +19,3 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
-
-flashback:
-  data-dir: /home/postgres/backups
-  backup-shell-path: /var/lib/postgresql/start_backup.sh
-  restore-shell-path: /var/lib/postgresql/start_restore.sh
-
-#  data-dir: /opt/gant/dbmt/mock/baseline/flashbackups
-#  backup-shell-path: /opt/gant/dbmt/mock/start-backup.sh
-#  restore-shell-path: /opt/gant/dbmt/mock/restore-backup.sh

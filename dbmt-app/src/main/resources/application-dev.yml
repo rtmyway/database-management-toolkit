@@ -1,0 +1,5 @@
+server.port: 8080
+flashback:
+  data-dir: /home/postgres/backups
+  backup-shell-path: /var/lib/postgresql/start_backup.sh
+  restore-shell-path: /var/lib/postgresql/start_restore.sh

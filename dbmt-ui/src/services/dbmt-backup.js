@@ -17,3 +17,8 @@ export function listPage(params, callback){
   let reqObj = requestCommon.getPostReqObj(serverConfig.dbmterver, apiUrlConfig.backupApiUrl.listPage, params);
   requestCommon.processRequest(reqObj, callback);
 }
+
+export default {
+  add : add,
+  listPage : listPage,
+};
