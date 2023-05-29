@@ -42,7 +42,6 @@ public class BackupServiceImpl implements BackupService {
     private QueryCommonService queryCommonService;
     @Autowired
     private TaskProcessInfo taskProcessInfo;
-
     @Autowired
     private BusinessTaskExecutor businessTaskExecutor;
 
