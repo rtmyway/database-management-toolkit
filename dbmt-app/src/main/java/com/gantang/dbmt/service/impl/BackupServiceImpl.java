@@ -9,22 +9,25 @@ import com.gantang.dbmt.dao.repository.BackupExecuteLogRepository;
 import com.gantang.dbmt.dao.repository.ConnectionConfigRepository;
 import com.gantang.dbmt.dto.PageDto;
 import com.gantang.dbmt.enumeration.DatabaseItem;
+import com.gantang.dbmt.enumeration.OpModeItem;
 import com.gantang.dbmt.execption.DbmtException;
 import com.gantang.dbmt.service.BackupService;
 import com.gantang.dbmt.service.QueryCommonService;
 import com.gantang.dbmt.task.TaskItem;
 import com.gantang.dbmt.task.TaskProcessInfo;
+import com.gantang.dbmt.thread.BusinessTaskConfig;
+import com.gantang.dbmt.thread.BusinessTaskExecutor;
 import com.gantang.dbmt.util.FileTool;
 import com.gantang.dbmt.util.JsonTool;
 import com.gantang.dbmt.util.ShellTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -40,80 +43,35 @@ public class BackupServiceImpl implements BackupService {
     @Autowired
     private TaskProcessInfo taskProcessInfo;
 
+    @Autowired
+    private BusinessTaskExecutor businessTaskExecutor;
+
     @Override
-    @Async
     public Boolean add(BackupExecuteLogEntity backupExecuteLogEntity) throws DbmtException {
-        // 获得需要备份的数据库连接信息
-        Optional<ConnectionConfigEntity> connectionConfigObj = connectionConfigRepository.findById(backupExecuteLogEntity.getSourceConnectionId());
-        if (!connectionConfigObj.isPresent()) {
-            log.error("数据库连接信息不存在, id:{}", backupExecuteLogEntity.getSourceConnectionId());
-            return false;
+        // 1.获得源库连接信息
+        ConnectionConfigEntity sourceConnectionConfig = getConnectionConfigEntity(backupExecuteLogEntity.getSourceConnectionId());
+        if (sourceConnectionConfig == null) {
+            log.error("源库连接信息不存在, id:{}", backupExecuteLogEntity.getSourceConnectionId());
+            throw new DbmtException("源库连接信息不存在");
         }
 
-        ConnectionConfigEntity sourceConnectionConfig = connectionConfigObj.get();
+        // 2.设置备份任务信息
         backupExecuteLogEntity.setId(IdUtil.fastSimpleUUID());
+        if (StrUtil.isBlank(backupExecuteLogEntity.getOpMode())) {
+            // 默认手动备份
+            backupExecuteLogEntity.setOpMode(OpModeItem.MANUAL.getCode());
+        }
         backupExecuteLogEntity.setStartTime(System.currentTimeMillis());
         backupExecuteLogEntity.setCreatedAt(backupExecuteLogEntity.getStartTime());
-
-        // 源库配置快照
         backupExecuteLogEntity.setSourceConnectionSnapshot(JsonTool.toJson(sourceConnectionConfig));
 
-        // 锁住任务
-        taskProcessInfo.doStart(TaskItem.BACKUP, backupExecuteLogEntity.getId(), "");
-
-        // 创建记录
-        backupExecuteLogRepository.save(backupExecuteLogEntity);
-
-        // 调用shell
-        String[] backupShellArgs = new String[]{
-                "-d".concat(sourceConnectionConfig.getDatabaseName()),
-                "-h".concat(sourceConnectionConfig.getHost()),
-                "-p".concat(sourceConnectionConfig.getPort()),
-                "-D".concat(flashbackConfig.getDataDir()),
-                "-P".concat(sourceConnectionConfig.getPassword()),
-                "-i".concat(backupExecuteLogEntity.getId())  // 指定标识备份的id
-        };
-
-        String executeUser = "";
-        DatabaseItem databaseItem = DatabaseItem.getByCode(sourceConnectionConfig.getDatabaseItem());
-        if (databaseItem != null) {
-            executeUser = databaseItem.getExecuteUser();
-        }
-
-        int status = ShellTool.execute(executeUser, flashbackConfig.getBackupShellPath(), backupShellArgs);
-
-        // 备份目录(相对路径)
-        String backupDirPath = "/".concat(sourceConnectionConfig.getHost()).concat("/").concat(sourceConnectionConfig.getDatabaseName());
-        // 备份文件名称
-        String backupFileName = backupExecuteLogEntity.getId().concat(".tar");
-        // 备份文件成功标识
-        String successFileName = ("1.").concat(backupExecuteLogEntity.getId());
-
-        String successFileFullPath = flashbackConfig.getDataDir().concat(backupDirPath).concat("/").concat(successFileName);
-        String backupFileFullPath = flashbackConfig.getDataDir().concat(backupDirPath).concat("/").concat(backupFileName);
-
-        backupExecuteLogEntity.setEndTime(System.currentTimeMillis());
-        backupExecuteLogEntity.setUpdatedAt(backupExecuteLogEntity.getEndTime());
-        backupExecuteLogEntity.setIsSuccess(FileTool.isExist(successFileFullPath));
-
-        if (backupExecuteLogEntity.getIsSuccess()) {
-            backupExecuteLogEntity.setIsSuccess(true);
-            if (FileTool.isExist(backupFileFullPath)) {
-                backupExecuteLogEntity.setBackupFileSize(FileTool.getFileSize(backupFileFullPath));
-                backupExecuteLogEntity.setBackupDir(backupDirPath);
-                backupExecuteLogEntity.setBackupFileName(backupFileName);
-            }
-        }
-
-        // 日志输出
-        log.info("backup ConnectionConfig={}, backupExecuteLog={}", sourceConnectionConfig, backupExecuteLogEntity);
-
-        // 更新记录
-        backupExecuteLogRepository.save(backupExecuteLogEntity);
-
-        // 解锁任务
-        taskProcessInfo.doEnd();
-
+        // 3.子线程运行备份任务
+        BusinessTaskConfig config = new BusinessTaskConfig(
+                "执行备份",
+                getBackupFunc(),
+                new Object[] {backupExecuteLogEntity, sourceConnectionConfig},
+                true);
+        businessTaskExecutor.execute(config);
         return true;
     }
 
@@ -123,7 +81,7 @@ public class BackupServiceImpl implements BackupService {
         Optional<BackupExecuteLogEntity> logObj = backupExecuteLogRepository.findById(backupExecuteLogEntity.getId());
         if (!logObj.isPresent()) {
             log.error("备份信息不存在, id:{}", backupExecuteLogEntity.getId());
-            return false;
+            throw new DbmtException("备份信息不存在");
         }
 
         BackupExecuteLogEntity logEntity = logObj.get();
@@ -218,5 +176,85 @@ public class BackupServiceImpl implements BackupService {
             backupFile.delete();
         }
         return true;
+    }
+
+    private Function getBackupFunc() {
+        Function<Object[], Boolean> triggerFunc = (p) -> {
+            BackupExecuteLogEntity backupExecuteLogEntity = (BackupExecuteLogEntity) p[0];
+            ConnectionConfigEntity sourceConnectionConfig = (ConnectionConfigEntity) p[1];
+
+            // 锁住任务
+            taskProcessInfo.doStart(TaskItem.BACKUP, backupExecuteLogEntity.getId(), "");
+            try {
+                // 新增一条备份记录
+                backupExecuteLogRepository.save(backupExecuteLogEntity);
+
+                // 调用shell
+                String[] backupShellArgs = new String[]{
+                        "-d".concat(sourceConnectionConfig.getDatabaseName()),
+                        "-h".concat(sourceConnectionConfig.getHost()),
+                        "-p".concat(sourceConnectionConfig.getPort()),
+                        "-D".concat(flashbackConfig.getDataDir()),
+                        "-P".concat(sourceConnectionConfig.getPassword()),
+                        "-i".concat(backupExecuteLogEntity.getId())  // 指定标识备份的id
+                };
+
+                // 根据不同数据库获得不同的shell执行用户
+                String executeUser = "";
+                DatabaseItem databaseItem = DatabaseItem.getByCode(sourceConnectionConfig.getDatabaseItem());
+                if (databaseItem != null) {
+                    executeUser = databaseItem.getExecuteUser();
+                }
+
+                // 执行备份脚本
+                ShellTool.execute(executeUser, flashbackConfig.getBackupShellPath(), backupShellArgs);
+
+                // 备份目录(相对路径),备份文件名称,备份成功标识文件名称
+                String backupDirPath = "/".concat(sourceConnectionConfig.getHost()).concat("/").concat(sourceConnectionConfig.getDatabaseName());
+                String backupFileName = backupExecuteLogEntity.getId().concat(".tar");
+                String successFileName = ("1.").concat(backupExecuteLogEntity.getId());
+
+                // 备份文件全路径,备份成功标识文件全路径
+                String backupFileFullPath = flashbackConfig.getDataDir().concat(backupDirPath).concat("/").concat(backupFileName);
+                String successFileFullPath = flashbackConfig.getDataDir().concat(backupDirPath).concat("/").concat(successFileName);
+
+                // 更新备份记录
+                backupExecuteLogEntity.setEndTime(System.currentTimeMillis());
+                backupExecuteLogEntity.setUpdatedAt(backupExecuteLogEntity.getEndTime());
+                backupExecuteLogEntity.setIsSuccess(FileTool.isExist(successFileFullPath));
+                if (backupExecuteLogEntity.getIsSuccess()) {
+                    backupExecuteLogEntity.setIsSuccess(true);
+                    if (FileTool.isExist(backupFileFullPath)) {
+                        backupExecuteLogEntity.setBackupFileSize(FileTool.getFileSize(backupFileFullPath));
+                        backupExecuteLogEntity.setBackupDir(backupDirPath);
+                        backupExecuteLogEntity.setBackupFileName(backupFileName);
+                    }
+                }
+
+                // 更新记录
+                backupExecuteLogRepository.save(backupExecuteLogEntity);
+
+                // 日志输出
+                log.info("backup ConnectionConfig={}, backupExecuteLog={}", sourceConnectionConfig, backupExecuteLogEntity);
+            } catch (Exception e) {
+
+            } finally {
+                // 解锁任务
+                taskProcessInfo.doEnd();
+            }
+            return true;
+        };
+        return triggerFunc;
+    }
+
+
+    /**
+     * 根据连接id获得连接信息
+     * @param connectionId
+     * @return
+     */
+    private ConnectionConfigEntity getConnectionConfigEntity(String connectionId) {
+        Optional<ConnectionConfigEntity> connectionConfigEntityObj = connectionConfigRepository.findById(connectionId);
+        return connectionConfigEntityObj.isPresent() ? connectionConfigEntityObj.get() : null;
     }
 }

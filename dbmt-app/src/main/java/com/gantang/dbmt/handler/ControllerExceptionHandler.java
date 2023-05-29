@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.util.Locale;
@@ -22,8 +23,9 @@ public class ControllerExceptionHandler {
      * @param req
      * @return
      */
+    @ResponseBody
     @ExceptionHandler(value = { DbmtException.class, Exception.class })
-    public ResponseEntity<Object> handleException(final Exception e, final ServletWebRequest req) {
+    public ResponseEntity<R> handleException(final Exception e, final ServletWebRequest req) {
         //获取接口路径
         String apiUrl = req.getRequest().getServletPath();
         

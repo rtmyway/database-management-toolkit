@@ -21,6 +21,7 @@ public class RestoreExecuteLogEntity extends BaseEntity {
     @Column(length = 10000)
     private String targetConnectionSnapshot; // 目标库连接信息快照
     private String backupLogId; // 备份id
+    private String backupFileName; // 备份文件名称
     private String opMode; // 操作模式(定时备份,手动备份)
     private Long startTime; // 开始时间
     private Long endTime; // 结束时间
