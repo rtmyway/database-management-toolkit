@@ -17,18 +17,20 @@ import com.gantang.dbmt.service.QueryCommonService;
 import com.gantang.dbmt.service.RestoreService;
 import com.gantang.dbmt.task.TaskItem;
 import com.gantang.dbmt.task.TaskProcessInfo;
-import com.gantang.dbmt.thread.BusinessTaskConfig;
-import com.gantang.dbmt.thread.BusinessTaskExecutor;
 import com.gantang.dbmt.util.FileTool;
 import com.gantang.dbmt.util.JsonTool;
 import com.gantang.dbmt.util.ShellTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 
 @Service
@@ -47,10 +49,19 @@ public class RestoreServiceImpl implements RestoreService {
     @Autowired
     private TaskProcessInfo taskProcessInfo;
     @Autowired
-    private BusinessTaskExecutor businessTaskExecutor;
+    @Qualifier("businessThreadPoolTaskExecutor")
+    private ThreadPoolTaskExecutor businessThreadPoolTaskExecutor;
+
+    private Future futureTask;
 
     @Override
     public Boolean add(RestoreExecuteLogEntity restoreExecuteLogEntity) throws DbmtException {
+        if (futureTask != null) {
+            if (!(futureTask.isCancelled() || futureTask.isDone())) {
+                throw new DbmtException("当前有恢复任务正在执行, 请稍后再试");
+            }
+        }
+
         // 1.获得备份信息
         BackupExecuteLogEntity backupExecuteLogEntity = getBackupExecuteLog(restoreExecuteLogEntity.getBackupLogId());
         if (backupExecuteLogEntity == null) {
@@ -92,13 +103,13 @@ public class RestoreServiceImpl implements RestoreService {
         restoreExecuteLogEntity.setBackupFileName(backupExecuteLogEntity.getBackupFileName());
 
 
-        // 5.子线程运行恢复任务
-        BusinessTaskConfig config = new BusinessTaskConfig(
-                "执行恢复",
-                getRestoreFunc(),
-                new Object[] {backupExecuteLogEntity, restoreExecuteLogEntity, sourceConnectionConfig, targetConnectionConfig},
-                true);
-        businessTaskExecutor.execute(config);
+        ConnectionConfigEntity finalTargetConnectionConfig = targetConnectionConfig;
+        futureTask = businessThreadPoolTaskExecutor.submit(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return getRestoreFunc().apply(new Object[] {backupExecuteLogEntity, restoreExecuteLogEntity, sourceConnectionConfig, finalTargetConnectionConfig});
+            }
+        });
         return true;
     }
 
@@ -182,6 +193,30 @@ public class RestoreServiceImpl implements RestoreService {
             throw new RuntimeException(e);
         }
         return resultDto;
+    }
+
+    @Override
+    public Boolean cancel(RestoreExecuteLogEntity restoreExecuteLogEntity) throws DbmtException {
+        if (!restoreExecuteLogEntity.getId().equals(taskProcessInfo.getTaskId())) {
+            throw new DbmtException("任务不存在");
+        }
+
+        if (!taskProcessInfo.isProcessing()) {
+            throw new DbmtException("任务未执行或已完成");
+        }
+
+        taskProcessInfo.doEnd();
+        if (futureTask != null) {
+            futureTask.cancel(true);
+        }
+
+        // 更新恢复记录
+        RestoreExecuteLogEntity entity = this.getRestoreExecuteLog(restoreExecuteLogEntity.getId());
+        entity.setIsSuccess(false);
+        entity.setEndTime(System.currentTimeMillis());
+        entity.setUpdatedAt(entity.getEndTime());
+        restoreExecuteLogRepository.save(entity);
+        return true;
     }
 
     /**
@@ -302,4 +337,6 @@ public class RestoreServiceImpl implements RestoreService {
         Optional<RestoreExecuteLogEntity> restoreExecuteLogObj = restoreExecuteLogRepository.findById(restoreLogId);
         return restoreExecuteLogObj.isPresent() ? restoreExecuteLogObj.get() : null;
     }
+
+
 }

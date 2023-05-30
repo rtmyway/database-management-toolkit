@@ -42,4 +42,9 @@ public class BackupController {
     public R<Boolean> remove(@RequestBody BackupExecuteLogEntity backupExecuteLogEntity) throws DbmtException {
         return R.success(backupService.remove(backupExecuteLogEntity));
     }
+
+    @PostMapping("cancel")
+    public R<Boolean> cancel(@RequestBody BackupExecuteLogEntity backupExecuteLogEntity) throws DbmtException {
+        return R.success(backupService.cancel(backupExecuteLogEntity));
+    }
 }
