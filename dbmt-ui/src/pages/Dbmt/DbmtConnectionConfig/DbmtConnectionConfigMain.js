@@ -276,6 +276,68 @@ export default class DbmtConnectionConfigMain extends Component {
     });
   }
 
+  // 终止备份
+  cancelBackup = (backupLogObj) => {
+    let that = this;
+    confirm({
+      title: `确定终止备份任务吗?`,
+      content: '',
+      okText: '终止',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        // const reqParam = {
+        //   backupLogId: backupLogObj.id,
+        // };
+        // // 加载状态=>完成
+        // that.setState({ loading: true, });
+        // restoreService.add(reqParam, (response) => {
+        //   if (response != undefined && response != null) {
+        //     message.info("恢复已开始,请耐心等待")
+        //   }
+        //   // 加载状态=>完成
+        //   that.setState({ loading: false, });
+        // });
+
+      },
+      onCancel() {
+
+      },
+    });
+  }  
+
+  // 删除备份
+  removeBackup = (backupLogObj) => {
+    let that = this;
+    confirm({
+      title: `确定删除备份 【${backupLogObj.backupFileName}】吗?`,
+      content: '',
+      okText: '删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        // const reqParam = {
+        //   backupLogId: backupLogObj.id,
+        // };
+        // // 加载状态=>完成
+        // that.setState({ loading: true, });
+        // restoreService.add(reqParam, (response) => {
+        //   if (response != undefined && response != null) {
+        //     message.info("恢复已开始,请耐心等待")
+        //   }
+        //   // 加载状态=>完成
+        //   that.setState({ loading: false, });
+        // });
+
+      },
+      onCancel() {
+
+      },
+    });
+  }    
+
+
+
   // 立即执行恢复
   addRestore = (backupLogObj) => {
     let that = this;
@@ -340,11 +402,13 @@ export default class DbmtConnectionConfigMain extends Component {
       itemLayout="horizontal"
       dataSource={this.state.backupLogList}
       renderItem={item => {
-        let dateStr = moment(item.updatedAt).format('YYYY-MM-DD HH:MM:SS');
+        let dateStr = moment(item.createdAt).format('YYYY-MM-DD HH:mm:SS');
 
         let backupOpDom = <div>
-          <a style={{ textDecoration: 'underline' }} key={'a-' + item.id} onClick={() => { copy(item.id); }}>{'复制'}</a>
-          <a style={{ textDecoration: 'underline', marginLeft: '20px', color: 'red' }} key={'b-' + item.id} onClick={() => { this.addRestore(item); }}>{'恢复版本'}</a>
+          <a style={{ textDecoration: 'underline' }} key={'a-' + item.id} onClick={() => { copy(item.id); message.info('已复制版本号')}}>{'版本号'}</a>
+          <a style={{ textDecoration: 'underline', marginLeft: '20px', color: 'red' }} key={'b-' + item.id} onClick={() => { this.cancelBackup(item); }}>{'取消'}</a>
+          <a style={{ textDecoration: 'underline', marginLeft: '20px', color: 'red' }} key={'b-' + item.id} onClick={() => { this.removeBackup(item); }}>{'删除'}</a>
+          <a style={{ textDecoration: 'underline', marginLeft: '20px', color: 'red' }} key={'b-' + item.id} onClick={() => { this.addRestore(item); }}>{'恢复'}</a>
         </div>
 
         let backupItemDom = <Descriptions bordered title={''} size={'small'} column={5}>
